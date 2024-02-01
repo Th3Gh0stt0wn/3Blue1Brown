@@ -1,0 +1,58 @@
+import pygame
+pygame.init()
+from pygame import mixer
+pygame.display.set_caption("3 blue 1 brown")
+screen = pygame.display.set_mode ((400,400))
+
+clock = pygame.time.Clock()
+gameover = False
+
+#smol
+bx= 20
+bVx= 1
+mass = 50
+
+#biggo
+bx2= 90
+bVx2= -1
+mass2 = 200
+
+Collision = 0
+
+
+mixer.init()
+music = pygame.mixer.Sound("boing.mp3")
+
+while not gameover:
+    
+    clock.tick(60)
+        
+    if bx < 0 or bx + 10 >= 380:
+        bVx *= -1
+        
+    if bx2 < bx +20 :
+        bVx *= -1
+        bVx2 *= -1
+
+    if bx < 0 or bx2 < 0:
+        bVx *= 1
+        bVx2 *= 1
+        Collision +=1
+        pygame.mixer.Sound.play(music)
+    
+    amth = ((mass - mass2)/(mass + mass2)*bVx)
+    amth2 = ((2*mass)/(mass+mass2)*bVx2)
+    
+    bx += amth
+    bx2 += amth2
+    
+    screen.fill((0,0,0))
+    font = pygame.font.Font(None, 74)
+    text = font.render(str(Collision), 1, (255, 254, 227))
+    screen.blit(text, (10,10))
+    pygame.draw.rect(screen, (255, 0, 162), (bx, 365, 30, 30))
+    pygame.draw.rect(screen, (0, 255, 200), (bx2, 355, 40, 40))
+    
+    pygame.display.flip()
+    
+pygame.quit()
